@@ -1,0 +1,17 @@
+# projects/house_price/predict_example.py
+import joblib
+import pandas as pd
+import numpy as np
+
+model = joblib.load("projects/house_price/models/house_price_model.joblib")
+
+# Example: use first row from test CSV (or provide values manually)
+# Here we load train.csv and take one sample to predict
+df = pd.read_csv("projects/house_price/data/train.csv")
+df['SalePrice_log'] = np.log1p(df['SalePrice'])
+features = ['OverallQual','GrLivArea','YearBuilt','TotalBsmtSF','FullBath','GarageCars','GarageArea','LotArea']
+sample = df[features].iloc[0:1]
+print("Input sample:\n", sample)
+pred_log = model.predict(sample)
+print("Predicted SalePrice (log):", pred_log)
+print("Predicted SalePrice (original):", np.expm1(pred_log))
